@@ -5,5 +5,4 @@ import androidx.annotation.StringRes
 
 data class Task(
     @StringRes var stringResourceId: Int,
-    @DrawableRes var imageResourceId: Int
 )

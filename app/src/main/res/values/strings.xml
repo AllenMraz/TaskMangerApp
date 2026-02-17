@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TaskMangerApp</string>
+    <string name="task1">Dishes</string>
+    <string name="task2">Running</string>
+    <string name="task3">Clean Table</string>
+    <string name="task4">Put away clothes</string>
 </resources>
