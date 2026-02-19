@@ -1,26 +1,33 @@
 package com.example.taskmangerapp
 
+import android.R
+import android.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -31,7 +38,8 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
 ){
     Column(modifier = modifier){
         AddTask(
-            list = taskViewModel.tasks.toMutableStateList()
+            list = taskViewModel.tasks,
+            onAddTask = {task -> taskViewModel.add(task)}
         )
 
         TaskList(
@@ -48,16 +56,19 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
 }
 
 @Composable
-fun AddTask ( list: MutableList<Task>, modifier: Modifier = Modifier){
-    var input by remember {   mutableStateOf<String>("0") }
-    Row(modifier = modifier) {
+fun AddTask (list: List<Task>, onAddTask: (Task) -> Unit, modifier: Modifier = Modifier){
+    var input by remember {   mutableStateOf<String>("") }
+    var id  by remember { mutableIntStateOf(list.size) }
+    Row(modifier = modifier.padding(16.dp)) {
         TextField(
             value = input,
             onValueChange = { input = it },
             modifier = modifier
         )
-        Button(onClick = {list.add(Task(label=input))
-                            input = ""}) {
+        Button(onClick = { onAddTask( Task(id,input))
+                            input = ""
+                            id = list.size + 1},
+                modifier = modifier) {
             Text("Add Task")
         }
     }
@@ -70,21 +81,38 @@ fun TaskManagerCard(taskName: String,
                     checked: Boolean,
                     onCheckedChange: (Boolean) -> Unit,
                     onClose: () -> Unit,
-                    modifier : Modifier = Modifier){
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(modifier = Modifier
-            .weight(1f)
-            .padding(start = 16.dp),
-            text = taskName)
-        Checkbox(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
-        IconButton(onClick = onClose){
-            Icon(Icons.Filled.Close,  contentDescription = "Close")
+                    modifier: Modifier = Modifier){
+    var color = MaterialTheme.colorScheme.onBackground
+
+    if(checked){
+        color = MaterialTheme.colorScheme.error
+    }
+
+    Card(modifier = modifier,) {
+        Row(
+            modifier = modifier.fillMaxWidth()
+                .clip(MaterialTheme.shapes.small)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+
+
+            ) {
+            IconButton(onClick = onClose) {
+                Icon(Icons.Filled.Delete, contentDescription = "Delete")
+            }
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp),
+                text = taskName,
+                color = color
+
+            )
+            Checkbox(
+                checked = checked,
+                onCheckedChange = onCheckedChange
+            )
+
         }
     }
 
@@ -96,7 +124,7 @@ fun TaskList(list: List<Task>,
              onCloseTask: (Task) -> Unit,
              modifier: Modifier = Modifier){
     LazyColumn(modifier = modifier) {
-        items(list, key = { task -> task.label}){ task ->
+        items(list, key = { task -> task.id}){ task ->
             TaskManagerCard(
                 taskName = task.label,
                 checked = task.checked,

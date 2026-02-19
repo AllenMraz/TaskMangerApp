@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.example.taskmangerapp.Task
 import com.example.taskmangerapp.ui.theme.TaskMangerAppTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TaskMangerAppTheme {
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -46,7 +48,14 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 private fun TaskPreview(){
-    TaskManagerApp()
+
+    TaskMangerAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            TaskManagerApp()
+        }
+    }
 }
 
 

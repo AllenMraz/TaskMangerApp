@@ -13,8 +13,12 @@ class TaskViewModel : ViewModel(){
         _tasks.remove(item)
     }
 
+    fun add(item: Task) {
+        _tasks.add(item)
+    }
+
     fun changeTaskChecked(item: Task, checked: Boolean) =
-        tasks.find{ it.label == item.label}?.let {task -> task.checked = checked}
+        tasks.find{ it.id == item.id}?.let {task -> task.checked = checked}
 }
 
-private fun getTasks() = MutableList(1){i -> Task("Dishes") }
+private fun getTasks() = MutableList(1){i -> Task(i,"Dishes") }
