@@ -11,7 +11,12 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +28,10 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
                    taskViewModel: TaskViewModel = viewModel()
 ){
     Column(modifier = modifier){
+        AddTask(
+
+        )
+
         TaskList(
             list = taskViewModel.tasks,
             onCheckedTask = { task, checked ->
@@ -34,6 +43,19 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
         )
     }
 
+}
+
+@Composable
+fun AddTask ( modifier: Modifier = Modifier){
+    var input by remember {   mutableStateOf<String>("0") }
+    Row(modifier = modifier) {
+        TextField(
+            value = input,
+            onValueChange = { input = it },
+            modifier = modifier
+        )
+
+    }
 }
 
 

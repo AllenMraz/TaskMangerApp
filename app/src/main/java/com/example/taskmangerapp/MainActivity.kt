@@ -43,6 +43,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Preview
+@Composable
+private fun TaskPreview(){
+    TaskManagerApp()
+}
+
 
 
 
