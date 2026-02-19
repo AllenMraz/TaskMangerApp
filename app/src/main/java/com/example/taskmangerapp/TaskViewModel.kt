@@ -2,7 +2,7 @@ package com.example.taskmangerapp
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
-import com.example.taskmangerapp.Task
+
 
 class TaskViewModel : ViewModel(){
     private val _tasks = getTasks().toMutableStateList()
@@ -14,7 +14,7 @@ class TaskViewModel : ViewModel(){
     }
 
     fun changeTaskChecked(item: Task, checked: Boolean) =
-        tasks.find{ it.id == item.id}?.let {task -> task.checked = checked}
+        tasks.find{ it.label == item.label}?.let {task -> task.checked = checked}
 }
 
-private fun getTasks() = List(30){i -> Task(i, "") }
+private fun getTasks() = MutableList(1){i -> Task("Dishes") }

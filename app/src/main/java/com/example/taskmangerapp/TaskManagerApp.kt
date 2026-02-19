@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
 ){
     Column(modifier = modifier){
         AddTask(
-
+            list = taskViewModel.tasks.toMutableStateList()
         )
 
         TaskList(
@@ -47,7 +48,7 @@ fun TaskManagerApp(modifier: Modifier = Modifier,
 }
 
 @Composable
-fun AddTask ( modifier: Modifier = Modifier){
+fun AddTask ( list: MutableList<Task>, modifier: Modifier = Modifier){
     var input by remember {   mutableStateOf<String>("0") }
     Row(modifier = modifier) {
         TextField(
@@ -55,7 +56,8 @@ fun AddTask ( modifier: Modifier = Modifier){
             onValueChange = { input = it },
             modifier = modifier
         )
-        Button(onClick = {/*TODO*/}) {
+        Button(onClick = {list.add(Task(label=input))
+                            input = ""}) {
             Text("Add Task")
         }
     }
@@ -94,7 +96,7 @@ fun TaskList(list: List<Task>,
              onCloseTask: (Task) -> Unit,
              modifier: Modifier = Modifier){
     LazyColumn(modifier = modifier) {
-        items(list, key = { task -> task.id}){ task ->
+        items(list, key = { task -> task.label}){ task ->
             TaskManagerCard(
                 taskName = task.label,
                 checked = task.checked,
